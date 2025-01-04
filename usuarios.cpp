@@ -8,17 +8,64 @@ using namespace std;
 
 
 void mostrarMenu(){ //Desarrollo de la función mostrarMenu, la cual muestra por pantalla el menú del casino
-    cout << "\n--- Bienvenido al Casino ---\n";
-    cout << "1. Jugar a Adivina el numero\n";
-    cout << "2. Jugar a las Tragamonedas\n";
-    cout << "3. Jugar al Par o Impar\n";
-    cout << "4. Salir\n";
+    int saldo = 1000;  // Saldo inicial del jugador
+    int opcion, edad; //Opción elegida por el jugador y su edad
+    string nombre; //Nombre del jugador
+
+    srand(time(0));  // Inicializar generador de números aleatorios
+
+    cout << "Introduzca su nombre"<< endl;
+    cin >> nombre; 
+    cout << "Introduzca su edad " << endl;
+    cin >> edad;
+
+    try{ //Si el jugador tiene 18 o más años podrá acceder al casino
+        if(edad < 18){ //Si el jugador es menor de 18 no podrá acceder al casino y se lanzará una excepción
+            throw runtime_error("Eres menor de edad");
+        } else{
+            cout <<"Todo bien."<< endl;
+        };
+
+        do { //Bucle do encargado de hacer funcionar el menú del casino
+            cout << "\n--- Bienvenido al Casino ---\n";
+            cout << "1. Jugar a Adivina el numero\n";
+            cout << "2. Jugar a las Tragamonedas\n";
+            cout << "3. Jugar al Par o Impar\n";
+            cout << "4. Salir\n";
+            cout << "Selecciona una opcion: ";
+            cin >> opcion;
+
+            switch (opcion) {
+                case 1: //Si el jugador elige esta opción se iniciará el primer juego
+                    adivinaElNumero(saldo); 
+                    break;
+                case 2: //Si el jugador elige esta opción se iniciará el segundo juego
+                    jugarTragamonedas(saldo);
+                    break;
+                case 3: //Si el jugador elige esta opción se iniciará el tercer juego
+                    parImpar(saldo);
+                    break;
+                case 4: //Si el jugador elige esta opción saldrá del casino
+                    cout << "Gracias por jugar en el casino. Vuelve pronto!" << endl;
+                    break;
+                default: //Si el jugador no elige ninguna opción entre el 1 y el 4 se le informará y se le permitirá volver a intentarlo
+                    cout << "Opcion no valida. Intenta de nuevo." << endl;
+            }
+        } while (opcion != 4 && saldo > 0); //El bucle do continuará mientras que el jugador escoja una opción que no sea salir del juego y mientras su saldo sea positivo
+
+    } catch(const exception& e){
+        cout << "Error: " << e.what();
+    }
+
+    if (saldo <= 0) { //Si el saldo del jugador es 0 o menor se terminará el juego
+        cout << "Te has quedado sin saldo. Juego terminado!" << endl;
+    }
 }
 
 void adivinaElNumero(int &saldo){ //Desarrollo de la función adivinaElNumero, la cual ejecuta el primer juego
     int cantidadApostada, numeroApostado1, numeroGanador, numeroApostado2, numeroApostado3; //Declaración de las distintas variables necesarias en el primer juego
     cout << "\n Este es el juego de adivina el numero ---\n";
-    cout << "Tu saldo incial es: " << saldo<< " euros \n";
+    cout << "Saldo: " << saldo << " euros\n";
     cout << "Por favor, ingrese la cantidad a apostar: ";
     cin >> cantidadApostada;
 
@@ -52,7 +99,6 @@ void adivinaElNumero(int &saldo){ //Desarrollo de la función adivinaElNumero, l
         cout << "Perdiste. Suerte para la proxima vez.\n";
     }
     cout << "Tu saldo actual es: " << saldo << endl;
-    mostrarMenu(); //Tras terminar el juego se le vuelve a mostrar el menú al jugador para que decida qué quiere hacer
 }
 
 void jugarTragamonedas(int &saldo){ //Desarrollo de la función jugarTragamonedas, la cual ejecuta el segundo juego
@@ -62,9 +108,10 @@ void jugarTragamonedas(int &saldo){ //Desarrollo de la función jugarTragamoneda
     cout << "Ingresa la cantidad a apostar: ";
     cin >> apuesta;
 
-    if (apuesta > saldo) { //En caso de que la cantidad apostada sea mayor al saldo disponible del jugador se lanzará una excepción
+    if (apuesta > saldo || apuesta <= 0) { //En caso de que la cantidad apostada sea mayor al saldo disponible del jugador no le dejará jugar
         throw runtime_error("Saldo insuficiente");
     }
+
     int num1 = rand() % 10;  // Generador de número aleatorio entre el 0 y el 9 para los tres números
     int num2 = rand() % 10;
     int num3 = rand() % 10;
@@ -83,7 +130,6 @@ void jugarTragamonedas(int &saldo){ //Desarrollo de la función jugarTragamoneda
         cout << "No hubo suerte. Pierdes " << apuesta << " euros." << endl;
     }
     cout<<"Tu saldo restante es de: " << saldo << " euros" << endl;
-    mostrarMenu(); //Tras terminar el juego se le vuelve a mostrar el menú al jugador para que decida qué quiere hacer
 }
 
 void parImpar(int &saldo) { //Desarrollo de la función parImpar, la cual ejecuta el tercer juego
@@ -91,15 +137,16 @@ void parImpar(int &saldo) { //Desarrollo de la función parImpar, la cual ejecut
     int numeroOrdenador, apuesta; 
     
     cout << "Bienvenido al juego de Pares o Nones" << endl;
-    cout << "Saldo: " << saldo << "euros" << "\n";
+    cout << "Saldo: " << saldo << " euros\n";
     cout << "Ingresa la cantidad a apostar: ";
     cin >> apuesta;
-    cout << "Elige P para Par o I para Impar:" << endl;
-    cin >> eleccionJugador;
 
     if (apuesta > saldo) { //En caso de que la cantidad apostada sea mayor al saldo disponible del jugador se lanzará una excepción
         throw runtime_error("Saldo insuficiente");
     }
+
+    cout << "Elige P para Par o I para Impar:" << endl;
+    cin >> eleccionJugador;
 
     numeroOrdenador = rand() % 101; //Generador de número aleatorio entre el 0 y el 100
 
@@ -121,5 +168,4 @@ void parImpar(int &saldo) { //Desarrollo de la función parImpar, la cual ejecut
         saldo = saldo - apuesta;
         cout << "Tu saldo ahora es: " << saldo << endl;
     }
-    mostrarMenu(); //Tras terminar el juego se le vuelve a mostrar el menú al jugador para que decida qué quiere hacer
 }
