@@ -150,13 +150,13 @@ void parImpar(int &saldo) { //Desarrollo de la función parImpar, la cual ejecut
 
     numeroOrdenador = rand() % 101; //Generador de número aleatorio entre el 0 y el 100
 
-    if (eleccionJugador == "P" || "p" && numeroOrdenador %2 == 0){ //En caso de que el jugador acierte que el número es par, se le añadirá a su saldo la cantidad apostada multiplicada por 2
+    if (eleccionJugador == "P" || eleccionJugador == "p" && numeroOrdenador %2 == 0){ //En caso de que el jugador acierte que el número es par, se le añadirá a su saldo la cantidad apostada multiplicada por 2
         cout << "Has acertado, el numero es Par!!" << endl;
         cout << "El numero era: " << numeroOrdenador << endl;
         saldo = saldo + apuesta * 2;
         cout << "Tu saldo ahora es: " << saldo << endl;
     } 
-    else if (eleccionJugador == "I" || "i" && numeroOrdenador %2 == 1){ //En caso de que el jugador acierte que el número es impar, se le añadirá a su saldo la cantidad apostada multiplicada por 2
+    else if (eleccionJugador == "I" || eleccionJugador == "i" && numeroOrdenador %2 != 0){ //En caso de que el jugador acierte que el número es impar, se le añadirá a su saldo la cantidad apostada multiplicada por 2
         cout << "Has acertado, el numero es Impar!!" << endl;
         cout << "El numero era: " << numeroOrdenador << endl;
         saldo = saldo + apuesta * 2;
