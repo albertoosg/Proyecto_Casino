@@ -1,0 +1,6 @@
+ana 	perez	    18
+cris	fernandez	20
+pepe    moreno    	19
+maria	sainz		22
+carla	blazquez	25
+juan	martinez	23
